@@ -1,0 +1,32 @@
+{
+  "users": [
+    {
+      "id": "de88",
+      "firstName": "Dnyaneshwar ",
+      "lastName": "Argade",
+      "phone": "9322452859",
+      "email": "dnyaneshwarargade@gmail.com"
+    },
+    {
+      "id": "896d",
+      "firstName": "Saurabh",
+      "lastName": "Kale",
+      "phone": "9309941364",
+      "email": "saurabh@gmail.com"
+    },
+    {
+      "id": "2957",
+      "firstName": "Rohan",
+      "lastName": "Ambekar",
+      "phone": "9324342342",
+      "email": "rohan@gmail.com"
+    },
+    {
+      "id": "9451",
+      "firstName": "Rohit",
+      "lastName": "Kale",
+      "phone": "8329612481",
+      "email": "rohit@gmail.com"
+    }
+  ]
+}
