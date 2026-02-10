@@ -6,7 +6,7 @@ import {
   getUsers,
   createUser,
   updateUser,
-  deleteUser
+  deleteUser,
 } from "../api/userApi";
 
 const Users = () => {
@@ -15,63 +15,58 @@ const Users = () => {
     firstName: "",
     lastName: "",
     phone: "",
-    email: ""
+    email: "",
   });
-  
   const [editId, setEditId] = useState(null);
 
-  const fetchUsers = async () => {
-    const response = await getUsers();
-    setUsers(response.data);
+  // load users from localStorage
+  const loadUsers = () => {
+    const data = getUsers();
+    setUsers(data);
   };
 
   useEffect(() => {
-    fetchUsers();
+    loadUsers();
   }, []);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
-    try {
-      if (editId) {
-        await updateUser(editId, formData);
+    if (editId) {
+      updateUser(editId, formData);
 
-        Swal.fire({
-          icon: "success",
-          title: "User Updated",
-          text: "User updated successfully!",
-          timer: 1500,
-          showConfirmButton: false
-        });
-
-        setEditId(null);
-      } else {
-        await createUser(formData);
-
-        Swal.fire({
-          icon: "success",
-          title: "User Created",
-          text: "User added successfully!",
-          timer: 1500,
-          showConfirmButton: false
-        });
-      }
-
-      setFormData({
-        firstName: "",
-        lastName: "",
-        phone: "",
-        email: ""
+      Swal.fire({
+        icon: "success",
+        title: "User Updated",
+        text: "User updated successfully!",
+        timer: 1500,
+        showConfirmButton: false,
       });
 
-      fetchUsers();
-    } catch (error) {
+      setEditId(null);
+    } else {
+      createUser({
+        ...formData,
+        id: Date.now().toString(), // unique id
+      });
+
       Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "Something went wrong!"
+        icon: "success",
+        title: "User Created",
+        text: "User added successfully!",
+        timer: 1500,
+        showConfirmButton: false,
       });
     }
+
+    setFormData({
+      firstName: "",
+      lastName: "",
+      phone: "",
+      email: "",
+    });
+
+    loadUsers();
   };
 
   const handleEdit = (user) => {
@@ -79,7 +74,7 @@ const Users = () => {
       firstName: user.firstName,
       lastName: user.lastName,
       phone: user.phone,
-      email: user.email
+      email: user.email,
     });
     setEditId(user.id);
   };
@@ -92,21 +87,21 @@ const Users = () => {
       showCancelButton: true,
       confirmButtonColor: "#d33",
       cancelButtonColor: "#3085d6",
-      confirmButtonText: "Yes, delete it!"
+      confirmButtonText: "Yes, delete it!",
     });
 
     if (result.isConfirmed) {
-      await deleteUser(id);
+      deleteUser(id);
 
       Swal.fire({
         icon: "success",
         title: "Deleted",
         text: "User deleted successfully!",
         timer: 1200,
-        showConfirmButton: false
+        showConfirmButton: false,
       });
 
-      fetchUsers();
+      loadUsers();
     }
   };
 
@@ -119,11 +114,7 @@ const Users = () => {
         isEdit={!!editId}
       />
 
-      <UserList
-        users={users}
-        onEdit={handleEdit}
-        onDelete={handleDelete}
-      />
+      <UserList users={users} onEdit={handleEdit} onDelete={handleDelete} />
     </div>
   );
 };
